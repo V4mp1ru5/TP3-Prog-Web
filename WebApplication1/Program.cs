@@ -1,10 +1,20 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using System.Configuration;
 using WebApplication1.Data;
-var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<WebApplication1Context>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("WebApplication1Context") ?? throw new InvalidOperationException("Connection string 'WebApplication1Context' not found.")));
+using WebApplication1.Models;
 
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<WebApplication1Context>(options => {
+    options.UseSqlServer(builder.Configuration.GetConnectionString("WebApplication1Context") ?? throw new InvalidOperationException("Connection string 'WebApplication1Context' not found."));
+    options.UseLazyLoadingProxies();
+    });
+
+builder.Services.AddIdentity<VoyageUser,IdentityRole>()
+    .AddEntityFrameworkStores<WebApplication1Context>();
+    
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -31,6 +41,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

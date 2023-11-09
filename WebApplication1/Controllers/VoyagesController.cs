@@ -25,6 +25,8 @@ namespace WebApplication1.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Voyage>>> GetVoyages()
         {
+            
+
           if (_context.Voyages == null)
           {
               return NotFound();
@@ -114,7 +116,7 @@ namespace WebApplication1.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
-        }
+        }                                                                                                                                                                                                                                                                                                                                                                                    
 
         private bool VoyageExists(int id)
         {
