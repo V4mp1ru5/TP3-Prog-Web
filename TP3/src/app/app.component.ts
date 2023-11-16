@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Voyage} from "./Voyage";
 
 @Component({
@@ -13,27 +13,55 @@ export class AppComponent {
 
   constructor(public http: HttpClient) { }
 
-  register(){
+  public async register(){
     let user = {
-      "userName": "bobbybob",
+      "userName": "bobybob",
       "email": "user@example.com",
       "password": "Passw0rd!",
       "passwordConfirm": "Passw0rd!"
     }
     this.http.post<any>('https://localhost:7263/api/Account/Register', user).subscribe(res => console.log(res));
   }
-  login(){
+  public async login(){
+    let user = {
+      "userName": "bobybob",
+      "password": "Passw0rd!"
+    }
+    this.http.post<any>('https://localhost:7263/api/Account/Login', user).subscribe(res =>{
+      console.log(res);
+        localStorage.setItem('token', res.token);
+    });
+
 
   }
-  callapi(){
-
+  public async logout(){
+    localStorage.removeItem('token')
   }
-  logout(){
+  public async addVoyage(){
+    let token = localStorage.getItem('token');
+    let httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorisation': 'Bearer ' + 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..-9nJjoSqdu7IQ'
+      })
+    };
+    let voyage = {
+      id: 0,
+      name: 'Cancune'
+    }
 
+    this.http.post<any>('https://localhost:7263/api/Voyages/PostVoyage', voyage, httpOptions).subscribe(res => console.log(res));
   }
   public async getVoyages(){
-    let voyages = this.http.get<Voyage[]>('https://localhost:7263/api/Voyages/GetVoyages');
-    /*this.voyages = voyages*/
-    console.log(voyages)
+    let token = localStorage.getItem('token');
+    let httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorisation': 'Bearer ' + token
+      })
+    };
+
+    this.http.get<any>('https://localhost:7263/api/Voyages/GetVoyages', httpOptions).subscribe(res => console.log(res));
+
   }
 }

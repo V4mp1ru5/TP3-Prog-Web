@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
@@ -13,7 +15,7 @@ namespace WebApplication1.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    [Authorize(Roles = "VoyageLover")]
+    [Authorize]
     public class VoyagesController : ControllerBase
     {
         private readonly WebApplication1Context _context;
@@ -24,6 +26,7 @@ namespace WebApplication1.Controllers
         }
 
         // GET: api/Voyages
+        
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Voyage>>> GetVoyages()
         {
@@ -94,7 +97,10 @@ namespace WebApplication1.Controllers
           {
               return Problem("Entity set 'WebApplication1Context.Voyages'  is null.");
           }
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            VoyageUser user = _context.Users.Single(u => u.Id == userId);
             _context.Voyages.Add(voyage);
+            voyage.VoyageUser = user;
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetVoyage", new { id = voyage.Id }, voyage);
