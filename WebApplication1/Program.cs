@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using System.Configuration;
+using System.Text;
 using WebApplication1.Data;
 using WebApplication1.Models;
 
@@ -13,7 +16,27 @@ builder.Services.AddDbContext<WebApplication1Context>(options => {
     });
 
 builder.Services.AddIdentity<VoyageUser,IdentityRole>()
-    .AddEntityFrameworkStores<WebApplication1Context>();
+    .AddEntityFrameworkStores<WebApplication1Context>()
+    .AddDefaultTokenProviders();
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.SaveToken = true;
+    options.RequireHttpsMetadata = true;
+    options.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidateAudience = true,
+        ValidateIssuer = true,
+        ValidAudience = "http://localhost:4200",
+        ValidIssuer = "https://localhost:7263",
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Is This Working?"))
+    };
+});
     
 // Add services to the container.
 

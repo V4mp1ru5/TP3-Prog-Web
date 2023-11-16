@@ -13,6 +13,24 @@ export class AppComponent {
 
   constructor(public http: HttpClient) { }
 
+  register(){
+    let user = {
+      "userName": "bobbybob",
+      "email": "user@example.com",
+      "password": "Passw0rd!",
+      "passwordConfirm": "Passw0rd!"
+    }
+    this.http.post<any>('https://localhost:7263/api/Account/Register', user).subscribe(res => console.log(res));
+  }
+  login(){
+
+  }
+  callapi(){
+
+  }
+  logout(){
+
+  }
   public async getVoyages(){
     let voyages = this.http.get<Voyage[]>('https://localhost:7263/api/Voyages/GetVoyages');
     /*this.voyages = voyages*/
