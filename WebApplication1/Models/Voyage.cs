@@ -9,6 +9,6 @@ namespace WebApplication1.Models
         public string? Name { get; set; }
         public bool Public { get; set; }
         [JsonIgnore]
-        public virtual VoyageUser VoyageUser { get; set; }
+        public virtual List<VoyageUser>? VoyageUsers { get; set; } = new List<VoyageUser>();
     }
 }

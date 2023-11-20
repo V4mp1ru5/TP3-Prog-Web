@@ -19,6 +19,11 @@ builder.Services.AddIdentity<VoyageUser,IdentityRole>()
     .AddEntityFrameworkStores<WebApplication1Context>()
     .AddDefaultTokenProviders();
 
+builder.Services.AddControllers();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -27,13 +32,11 @@ builder.Services.AddAuthentication(options =>
 }).AddJwtBearer(options =>
 {
     options.SaveToken = true;
-    options.RequireHttpsMetadata = true;
+    options.RequireHttpsMetadata = false;
     options.TokenValidationParameters = new TokenValidationParameters()
     {
-        ValidateAudience = true,
-        ValidateIssuer = true,
-        ValidAudience = "http://localhost:4200",
-        ValidIssuer = "https://localhost:7263",
+        ValidateAudience = false,
+        ValidateIssuer = false,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Is This Working?"))
     };
 });
@@ -50,19 +53,8 @@ builder.Services.AddCors(options =>
     
 // Add services to the container.
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAll", builder =>
-    {
-        builder.AllowAnyOrigin();
-        builder.AllowAnyHeader();
-        builder.AllowAnyMethod();
-    });
-});
+
+
 
 var app = builder.Build();
 
@@ -82,9 +74,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
-app.UseCors("AllowAll");
-
-
 
 app.Run();

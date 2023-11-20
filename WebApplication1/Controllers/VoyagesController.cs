@@ -16,6 +16,7 @@ namespace WebApplication1.Controllers
     [Route("api/[controller]/[action]")]
     [ApiController]
     [Authorize]
+    
     public class VoyagesController : ControllerBase
     {
         private readonly WebApplication1Context _context;

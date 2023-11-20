@@ -42,8 +42,6 @@ namespace WebApplication1.Controllers
 
                 JwtSecurityToken token = new JwtSecurityToken
                     (
-                        issuer: "https://localhost:7263",
-                        audience: "https://localhost:4200",
                         claims: authClaims,
                         expires: DateTime.Now.AddHours(1),
                         signingCredentials: new SigningCredentials(authKey, SecurityAlgorithms.HmacSha256)

@@ -20,14 +20,14 @@ export class AppComponent {
       "password": "Passw0rd!",
       "passwordConfirm": "Passw0rd!"
     }
-    this.http.post<any>('https://localhost:7263/api/Account/Register', user).subscribe(res => console.log(res));
+    this.http.post<any>('http://localhost:5165/api/Account/Register', user).subscribe(res => console.log(res));
   }
   public async login(){
     let user = {
       "userName": "bobybob",
       "password": "Passw0rd!"
     }
-    this.http.post<any>('https://localhost:7263/api/Account/Login', user).subscribe(res =>{
+    this.http.post<any>('http://localhost:5165/api/Account/Login', user).subscribe(res =>{
       console.log(res);
         localStorage.setItem('token', res.token);
     });
@@ -41,27 +41,26 @@ export class AppComponent {
     let token = localStorage.getItem('token');
     let httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorisation': 'Bearer ' + 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..-9nJjoSqdu7IQ'
+        'Authorization': 'Bearer ' + token
       })
     };
     let voyage = {
       id: 0,
-      name: 'Cancune'
+      name: 'Cancune',
+      public: false
     }
 
-    this.http.post<any>('https://localhost:7263/api/Voyages/PostVoyage', voyage, httpOptions).subscribe(res => console.log(res));
+    this.http.post<any>('http://localhost:5165/api/Voyages/PostVoyage', voyage, httpOptions).subscribe(res => console.log(res));
   }
   public async getVoyages(){
     let token = localStorage.getItem('token');
     let httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorisation': 'Bearer ' + token
+        'Authorization': 'Bearer ' + token
       })
     };
 
-    this.http.get<any>('https://localhost:7263/api/Voyages/GetVoyages', httpOptions).subscribe(res => console.log(res));
+    this.http.get<any>('http://localhost:5165/api/Voyages/GetVoyages', httpOptions).subscribe(res => console.log(res));
 
   }
 }
