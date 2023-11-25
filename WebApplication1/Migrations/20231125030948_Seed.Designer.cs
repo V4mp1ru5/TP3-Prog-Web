@@ -12,8 +12,8 @@ using WebApplication1.Data;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(WebApplication1Context))]
-    [Migration("20231109195914_Init")]
-    partial class Init
+    [Migration("20231125030948_Seed")]
+    partial class Seed
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -161,6 +161,21 @@ namespace WebApplication1.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("VoyageVoyageUser", b =>
+                {
+                    b.Property<string>("VoyageUsersId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("VoyagesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("VoyageUsersId", "VoyagesId");
+
+                    b.HasIndex("VoyagesId");
+
+                    b.ToTable("VoyageVoyageUser");
+                });
+
             modelBuilder.Entity("WebApplication1.Models.Voyage", b =>
                 {
                     b.Property<int>("Id")
@@ -175,13 +190,7 @@ namespace WebApplication1.Migrations
                     b.Property<bool>("Public")
                         .HasColumnType("bit");
 
-                    b.Property<string>("VoyageUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("VoyageUserId");
 
                     b.ToTable("Voyages");
                 });
@@ -302,20 +311,19 @@ namespace WebApplication1.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("WebApplication1.Models.Voyage", b =>
+            modelBuilder.Entity("VoyageVoyageUser", b =>
                 {
-                    b.HasOne("WebApplication1.Models.VoyageUser", "VoyageUser")
-                        .WithMany("voyages")
-                        .HasForeignKey("VoyageUserId")
+                    b.HasOne("WebApplication1.Models.VoyageUser", null)
+                        .WithMany()
+                        .HasForeignKey("VoyageUsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("VoyageUser");
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.VoyageUser", b =>
-                {
-                    b.Navigation("voyages");
+                    b.HasOne("WebApplication1.Models.Voyage", null)
+                        .WithMany()
+                        .HasForeignKey("VoyagesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -1,0 +1,28 @@
+<form (ngSubmit)="data.register(uname.value, email.value, psw.value, pswconf.value)" method="post">
+
+  <div class="container">
+    <label><b>Username</b></label>
+    <br/>
+    <input type="text" placeholder="Enter Username" #uname name="uname" required>
+    <br/>
+    <label><b>Email</b></label>
+    <br/>
+    <input type="email" placeholder="Enter Email" #email name="email" required>
+    <br/>
+    <label><b>Password</b></label>
+    <br/>
+    <input type="password" placeholder="Enter Password" #psw name="psw" required>
+    <br/>
+    <label><b>Confirm password</b></label>
+    <br/>
+    <input type="password" placeholder="Confirm Password" #pswconf name="pswConf" required>
+    <br/>
+    <button [routerLink]="['/voyages']">Cancel</button>
+    <button type="submit">Register</button>
+  </div>
+</form>
+
+<div>
+  <p>Alredy have an Accounts?????</p>
+  <button [routerLink]="['/login']">Login</button>
+</div>

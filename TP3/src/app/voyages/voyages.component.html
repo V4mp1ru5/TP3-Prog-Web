@@ -1,0 +1,51 @@
+<div *ngIf="data.loggedIn">
+  <h2>Nouveau Voyage</h2>
+  <form (ngSubmit)="data.addVoyage(name.value, pub.checked)" method="post">
+    <label for="nomVoyage">Nom du Voyage:</label>
+    <br/>
+    <input type="text" #name id="nomVoyage" required>
+    <br/>
+    <label for="public">Voyage Public</label>
+    <input #pub type="checkbox" id="public" >
+    <br/>
+    <label for="image">Télécharger une Image:</label>
+    <br/>
+    <input type="file" id="image" >
+    <br/>
+    <button type="submit">Ajouter</button>
+  </form>
+</div>
+<br/>
+<ng-container *ngIf="!data.loggedIn">
+  <div *ngFor="let voyage of data.publicVoyages">
+    <h2>{{voyage.name}}</h2>
+    <img style="max-height: 200px" src="{{voyage.image}}" alt="image du voyage">
+    <br/>
+  </div>
+</ng-container>
+<ng-container *ngIf="data.loggedIn">
+  <div *ngFor="let voyage of data.userVoyages">
+    <h2>{{voyage.name}}</h2>
+    <img style="max-height: 200px" src="{{voyage.image}}" alt="image du voyage">
+    <br/>
+    <div *ngIf="data.loggedIn">
+      <button (click)="data.deleteVoyage(voyage.id)">Supprimer</button>
+      <button class="open-button" onclick="openForm()">Open Form</button>
+
+      <div class="form-popup" id="myForm">
+        <form action="" class="form-container">
+          <label for="name"><b>name</b></label>
+          <input id="name" #name type="text" placeholder="Enter Name" name="name" required>
+
+          <button (click)="data.share(voyage.id, name.value)" type="submit" class="btn">Share</button>
+          <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+
+
+</ng-container>
+

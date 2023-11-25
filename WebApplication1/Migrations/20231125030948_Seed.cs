@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WebApplication1.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class Seed : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -48,6 +48,20 @@ namespace WebApplication1.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Voyages",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Public = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Voyages", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -157,22 +171,25 @@ namespace WebApplication1.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Voyages",
+                name: "VoyageVoyageUser",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Public = table.Column<bool>(type: "bit", nullable: false),
-                    VoyageUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    VoyageUsersId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    VoyagesId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Voyages", x => x.Id);
+                    table.PrimaryKey("PK_VoyageVoyageUser", x => new { x.VoyageUsersId, x.VoyagesId });
                     table.ForeignKey(
-                        name: "FK_Voyages_AspNetUsers_VoyageUserId",
-                        column: x => x.VoyageUserId,
+                        name: "FK_VoyageVoyageUser_AspNetUsers_VoyageUsersId",
+                        column: x => x.VoyageUsersId,
                         principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_VoyageVoyageUser_Voyages_VoyagesId",
+                        column: x => x.VoyagesId,
+                        principalTable: "Voyages",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -217,9 +234,9 @@ namespace WebApplication1.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Voyages_VoyageUserId",
-                table: "Voyages",
-                column: "VoyageUserId");
+                name: "IX_VoyageVoyageUser_VoyagesId",
+                table: "VoyageVoyageUser",
+                column: "VoyagesId");
         }
 
         /// <inheritdoc />
@@ -241,13 +258,16 @@ namespace WebApplication1.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Voyages");
+                name: "VoyageVoyageUser");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Voyages");
         }
     }
 }

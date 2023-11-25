@@ -1,10 +1,19 @@
-<h1>hello</h1>
-<button (click)="register()">Enregistrement </button>
+<nav>
+  <span><a [routerLink]="['/voyages']"><h1>{{title}}</h1></a></span>
+</nav>
+<div *ngIf="!data.loggedIn">
+  <button [routerLink]="['/login']">Se Connecter</button>
+</div>
+<div *ngIf="data.loggedIn">
+  <button (click)="data.logout()">Se Deconnecter</button>
+</div>
+<router-outlet></router-outlet>
+<!--<br/>
+<button (click)="data.logout()">Deconnexion </button>
 <br/>
-<button (click)="login()">Connexion </button>
+<button (click)="data.getVoyages()">Affiche les voyages</button>
 <br/>
-<button (click)="logout()">Deconnexion </button>
+<button (click)="data.addVoyage()">Ajouter un voyage</button>
 <br/>
-<button (click)="getVoyages()">Affiche les voyages</button>
-<br/>
-<button (click)="addVoyage()">Ajouter un voyage</button>
+<a [routerLink]="['/voyage']"><img src="/src/assets/images/lake.jpg" alt="imageplaceholder"/></a>-->
+

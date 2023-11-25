@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -16,7 +17,7 @@ namespace WebApplication1.Controllers
     [Route("api/[controller]/[action]")]
     [ApiController]
     [Authorize]
-    
+
     public class VoyagesController : ControllerBase
     {
         private readonly WebApplication1Context _context;
@@ -27,27 +28,53 @@ namespace WebApplication1.Controllers
         }
 
         // GET: api/Voyages
-        
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Voyage>>> GetVoyages()
-        {
-            
 
-          if (_context.Voyages == null)
-          {
-              return NotFound();
-          }
-            return await _context.Voyages.ToListAsync();
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<ActionResult<IEnumerable<VoyageDTO>>> GetVoyages()
+        {
+
+
+            //if (_context.Voyages == null)
+            //{
+            //    return NotFound();
+            //}
+            //  return await _context.Voyages.ToListAsync();
+
+            List<VoyageDTO> voyageDTOs = new List<VoyageDTO>();
+
+
+            if (_context.Voyages == null)
+            {
+                return NotFound();
+            }
+            foreach (var voyage in _context.Voyages)
+            {
+                VoyageDTO voyageDTO = new VoyageDTO();
+                List<string> noms = new List<string>();
+
+                voyageDTO.Id = voyage.Id;
+                voyageDTO.Name = voyage.Name;
+                voyageDTO.Public = voyage.Public;
+                foreach (var user in voyage.VoyageUsers)
+                {
+                    noms.Add(user.UserName);
+                    voyageDTO.UserNames = noms;
+
+                }
+                voyageDTOs.Add(voyageDTO);
+            }
+            return voyageDTOs;
         }
 
         // GET: api/Voyages/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Voyage>> GetVoyage(int id)
         {
-          if (_context.Voyages == null)
-          {
-              return NotFound();
-          }
+            if (_context.Voyages == null)
+            {
+                return NotFound();
+            }
             var voyage = await _context.Voyages.FindAsync(id);
 
             if (voyage == null)
@@ -60,23 +87,21 @@ namespace WebApplication1.Controllers
 
         // PUT: api/Voyages/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutVoyage(int id, Voyage voyage)
+        [HttpPut]
+        public async Task<IActionResult> PutVoyage(ShareDTO shared)
         {
-            if (id != voyage.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(voyage).State = EntityState.Modified;
+            Voyage voyage = _context.Voyages.Single(v => v.Id == shared.VoyageId);
 
             try
             {
+                VoyageUser user = _context.Users.Single(u => u.UserName == shared.UserName);
+                
+                voyage.VoyageUsers.Add(user);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!VoyageExists(id))
+                if (!VoyageExists(voyage.Id))
                 {
                     return NotFound();
                 }
@@ -94,31 +119,31 @@ namespace WebApplication1.Controllers
         [HttpPost]
         public async Task<ActionResult<Voyage>> PostVoyage(Voyage voyage)
         {
-          if (_context.Voyages == null)
-          {
-              return Problem("Entity set 'WebApplication1Context.Voyages'  is null.");
-          }
+            if (_context.Voyages == null)
+            {
+                return Problem("Entity set 'WebApplication1Context.Voyages'  is null.");
+            }
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             VoyageUser user = _context.Users.Single(u => u.Id == userId);
             _context.Voyages.Add(voyage);
-            voyage.VoyageUser = user;
+            voyage.VoyageUsers.Add(user);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetVoyage", new { id = voyage.Id }, voyage);
         }
 
         // DELETE: api/Voyages/5
-        [HttpDelete("{id}")]
+        [HttpDelete]
         public async Task<IActionResult> DeleteVoyage(int id)
         {
             if (_context.Voyages == null)
             {
-                return NotFound();
+                return Problem("Il ny a pas de voyage");
             }
             var voyage = await _context.Voyages.FindAsync(id);
             if (voyage == null)
             {
-                return NotFound();
+                return  Problem("Le voyage is null.");
             }
 
             _context.Voyages.Remove(voyage);

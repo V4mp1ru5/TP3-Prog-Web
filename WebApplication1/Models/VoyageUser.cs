@@ -4,6 +4,6 @@ namespace WebApplication1.Models
 {
     public class VoyageUser: IdentityUser
     {
-        public virtual List<Voyage> voyages { get; set; }
+        public virtual List<Voyage> Voyages { get; set; } = new List<Voyage>();
     }
 }

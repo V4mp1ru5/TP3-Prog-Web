@@ -1,0 +1,22 @@
+
+
+<form (ngSubmit)="data.login(uname.value, psw.value)" method="post">
+
+  <div class="container">
+    <label><b>Username</b></label>
+    <br/>
+    <input type="text" placeholder="Enter Username" #uname name="uname" required>
+    <br/>
+    <label><b>Password</b></label>
+    <br/>
+    <input type="password" placeholder="Enter Password" #psw name="psw" required>
+    <br/>
+    <button [routerLink]="['/voyages']">Cancel</button>
+    <button type="submit">Login</button>
+  </div>
+</form>
+<div>
+  <p>No Accounts?????</p>
+  <button [routerLink]="['/register']">Register</button>
+</div>
+
