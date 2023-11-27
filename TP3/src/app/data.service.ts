@@ -72,12 +72,10 @@ export class DataService {
   }
 
   public async deleteVoyage(voyageId: number){
-    let id = {
-      id: voyageId
-    }
-
-    this.http.post<any>('http://localhost:5165/api/Voyages/DeleteVoyage', id).subscribe(res => console.log(res));
+    this.http.delete<any>('http://localhost:5165/api/Voyages/DeleteVoyage?id='+voyageId).subscribe(res => console.log(res));
+    await this.getVoyages();
   }
+
   public async getVoyages(){
     this.publicVoyages = [];
     this.userVoyages = [];

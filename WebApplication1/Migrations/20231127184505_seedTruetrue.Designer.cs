@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.Data;
 
@@ -11,9 +12,11 @@ using WebApplication1.Data;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(WebApplication1Context))]
-    partial class WebApplication1ContextModelSnapshot : ModelSnapshot
+    [Migration("20231127184505_seedTruetrue")]
+    partial class seedTruetrue
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -171,18 +174,6 @@ namespace WebApplication1.Migrations
                     b.HasIndex("VoyagesId");
 
                     b.ToTable("VoyageVoyageUser");
-
-                    b.HasData(
-                        new
-                        {
-                            VoyageUsersId = "11111111-1111-1111-1111-111111111111",
-                            VoyagesId = 1
-                        },
-                        new
-                        {
-                            VoyageUsersId = "11111111-1111-1111-1111-111111111111",
-                            VoyagesId = 2
-                        });
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Voyage", b =>
@@ -287,15 +278,15 @@ namespace WebApplication1.Migrations
                         {
                             Id = "11111111-1111-1111-1111-111111111111",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "c4c48a07-fcdd-4956-831f-67b5a3599021",
+                            ConcurrencyStamp = "d6b456e7-7eaf-4104-aa55-3aee8a44c47a",
                             Email = "jim@test.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "JIM@TEST.COM",
                             NormalizedUserName = "JIM@TEST.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEOSfpjq8107KuDInCenMETphKfA1v41sugOMgalq08ZCDgP4NeROFTf45Q2x6pkXDA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEKkyZw1L54VuVpv7J3dpdYPjC8TI6DfaclPNBZ1VGV3PcD2x7b+mCdRljPJnRXgSNA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "02f6fa63-48f7-4176-905b-71e22a76497c",
+                            SecurityStamp = "8b532367-d67b-4416-8955-c18fd0a91f64",
                             TwoFactorEnabled = false,
                             UserName = "jim@test.com"
                         });

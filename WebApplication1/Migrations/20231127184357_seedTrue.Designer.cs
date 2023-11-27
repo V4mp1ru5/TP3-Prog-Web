@@ -12,8 +12,8 @@ using WebApplication1.Data;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(WebApplication1Context))]
-    [Migration("20231125030948_Seed")]
-    partial class Seed
+    [Migration("20231127184357_seedTrue")]
+    partial class seedTrue
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -193,6 +193,20 @@ namespace WebApplication1.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Voyages");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "cancune",
+                            Public = true
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Bahamas",
+                            Public = false
+                        });
                 });
 
             modelBuilder.Entity("WebApplication1.Models.VoyageUser", b =>

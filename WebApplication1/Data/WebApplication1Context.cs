@@ -18,6 +18,7 @@ namespace WebApplication1.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
             var hasher = new PasswordHasher<VoyageUser>();
             VoyageUser u1 = new VoyageUser
             {
@@ -32,28 +33,25 @@ namespace WebApplication1.Data
             // On encrypte le mot de passe
             u1.PasswordHash = hasher.HashPassword(u1, "Passw0rd!");
             builder.Entity<VoyageUser>().HasData(u1);
-            builder.Entity<VoyageUser>().HasData(new
-            {
-                Id = 2,
-                Name = "Timothé",
-                DemoUserId = "11111111-1111-1111-1111-111111111111"
-            });
+
             builder.Entity<Voyage>().HasData(new
             {
                 Id = 1,
-                Name = "cancune"
+                Name = "cancune",
+                Public = true,
             });
             builder.Entity<Voyage>().HasData(new
             {
                 Id = 2,
-                Name = "Bahamas"
+                Name = "Bahamas",
+                Public = false,
             });
-            builder.Entity<VoyageUser>()
-                .HasMany(c => c.Voyages)
-                .WithMany(t => t.VoyageUsers)
+            builder.Entity<Voyage>()
+                .HasMany(t => t.VoyageUsers)
+                .WithMany(c => c.Voyages)
                 .UsingEntity(r => {
-                    r.HasData(new { VoyagesId = 1, UsersId = 1 });
-                    r.HasData(new { VoyagesId = 2, UsersId = 1 });
+                    r.HasData(new { VoyageUsersId = u1.Id, VoyagesId = 1 });
+                    r.HasData(new { VoyageUsersId = u1.Id, VoyagesId = 2 });
                 });
         }   
 
