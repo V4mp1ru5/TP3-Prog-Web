@@ -12,7 +12,7 @@ export class VoyagesComponent implements OnInit{
     public data: DataService
   ) { }
 
-  async ngOnInit () {
+  async ngOnInit() {
     await this.data.getVoyages();
   }
 }

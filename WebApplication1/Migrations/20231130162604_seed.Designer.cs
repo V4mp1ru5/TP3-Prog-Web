@@ -12,8 +12,8 @@ using WebApplication1.Data;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(WebApplication1Context))]
-    [Migration("20231127184357_seedTrue")]
-    partial class seedTrue
+    [Migration("20231130162604_seed")]
+    partial class seed
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -174,6 +174,18 @@ namespace WebApplication1.Migrations
                     b.HasIndex("VoyagesId");
 
                     b.ToTable("VoyageVoyageUser");
+
+                    b.HasData(
+                        new
+                        {
+                            VoyageUsersId = "11111111-1111-1111-1111-111111111111",
+                            VoyagesId = 1
+                        },
+                        new
+                        {
+                            VoyageUsersId = "11111111-1111-1111-1111-111111111111",
+                            VoyagesId = 2
+                        });
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Voyage", b =>
@@ -272,6 +284,24 @@ namespace WebApplication1.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "11111111-1111-1111-1111-111111111111",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "057d1ccf-b496-41ad-a625-604063209698",
+                            Email = "jim@test.com",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "JIM@TEST.COM",
+                            NormalizedUserName = "JIM@TEST.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAECi/I12uD9X2y/PcnNC2YZd7/PDs6NaO+s2RmT7eMTUIj3bKNsjHNZYfxOd01llQeA==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "75251976-aed5-48d0-aeb0-86f5cb37e6ef",
+                            TwoFactorEnabled = false,
+                            UserName = "jim@test.com"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

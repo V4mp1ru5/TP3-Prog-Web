@@ -56,5 +56,7 @@ namespace WebApplication1.Data
         }   
 
         public DbSet<WebApplication1.Models.Voyage> Voyages { get; set; } = default!;
+
+        public DbSet<WebApplication1.Models.Image> Image { get; set; } = default!;
     }
 }

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WebApplication1.Migrations
 {
     /// <inheritdoc />
-    public partial class seedTrue : Migration
+    public partial class seed : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -197,12 +197,26 @@ namespace WebApplication1.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[] { "11111111-1111-1111-1111-111111111111", 0, "057d1ccf-b496-41ad-a625-604063209698", "jim@test.com", false, false, null, "JIM@TEST.COM", "JIM@TEST.COM", "AQAAAAIAAYagAAAAECi/I12uD9X2y/PcnNC2YZd7/PDs6NaO+s2RmT7eMTUIj3bKNsjHNZYfxOd01llQeA==", null, false, "75251976-aed5-48d0-aeb0-86f5cb37e6ef", false, "jim@test.com" });
+
+            migrationBuilder.InsertData(
                 table: "Voyages",
                 columns: new[] { "Id", "Name", "Public" },
                 values: new object[,]
                 {
                     { 1, "cancune", true },
                     { 2, "Bahamas", false }
+                });
+
+            migrationBuilder.InsertData(
+                table: "VoyageVoyageUser",
+                columns: new[] { "VoyageUsersId", "VoyagesId" },
+                values: new object[,]
+                {
+                    { "11111111-1111-1111-1111-111111111111", 1 },
+                    { "11111111-1111-1111-1111-111111111111", 2 }
                 });
 
             migrationBuilder.CreateIndex(

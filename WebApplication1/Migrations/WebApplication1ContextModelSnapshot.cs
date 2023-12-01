@@ -287,15 +287,15 @@ namespace WebApplication1.Migrations
                         {
                             Id = "11111111-1111-1111-1111-111111111111",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "c4c48a07-fcdd-4956-831f-67b5a3599021",
+                            ConcurrencyStamp = "057d1ccf-b496-41ad-a625-604063209698",
                             Email = "jim@test.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "JIM@TEST.COM",
                             NormalizedUserName = "JIM@TEST.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEOSfpjq8107KuDInCenMETphKfA1v41sugOMgalq08ZCDgP4NeROFTf45Q2x6pkXDA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAECi/I12uD9X2y/PcnNC2YZd7/PDs6NaO+s2RmT7eMTUIj3bKNsjHNZYfxOd01llQeA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "02f6fa63-48f7-4176-905b-71e22a76497c",
+                            SecurityStamp = "75251976-aed5-48d0-aeb0-86f5cb37e6ef",
                             TwoFactorEnabled = false,
                             UserName = "jim@test.com"
                         });

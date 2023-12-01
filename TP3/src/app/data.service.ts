@@ -30,9 +30,9 @@ export class DataService {
   public async login(username: String, password: String){
     let user = {
       "userName": username,
-      "password": password
+      "password": password  
     }
-    this.http.post<any>('http://localhost:5165/api/Account/Login', user).subscribe(res =>{
+      this.http.post<any>('http://localhost:5165/api/Account/Login', user).subscribe(res => {
       console.log(res);
       localStorage.setItem('token', res.token);
     });
