@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
 using WebApplication1.Data;
 using WebApplication1.Models;
 
@@ -23,94 +25,93 @@ namespace WebApplication1.Controllers
 
         // GET: api/Images
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Image>>> GetImage()
+        public async Task<ActionResult<IEnumerable<Photo>>> GetImage()
         {
-          if (_context.Image == null)
+          if (_context.Photos == null)
           {
               return NotFound();
           }
-            return await _context.Image.ToListAsync();
+            return await _context.Photos.ToListAsync();
         }
 
         // GET: api/Images/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Image>> GetImage(int id)
+        [HttpGet("{size}/{id}")]
+        public async Task<IActionResult> GetImage(string size, int id)
         {
-          if (_context.Image == null)
-          {
-              return NotFound();
-          }
-            var image = await _context.Image.FindAsync(id);
+         
+            Photo photo = await _context.Photos.FindAsync(id);
 
-            if (image == null)
-            {
-                return NotFound();
-            }
+            byte[] bytes = System.IO.File.ReadAllBytes("C://Images/" + size + "/" + photo.FileName);
 
-            return image;
+            return File(bytes, photo.MimeType);
         }
 
-        // PUT: api/Images/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutImage(int id, Image image)
-        {
-            if (id != image.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(image).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ImageExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
 
         // POST: api/Images
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Image>> PostImage(Image image)
+        [DisableRequestSizeLimit]
+        public async Task<ActionResult<Photo>> PostImage()
         {
-          if (_context.Image == null)
-          {
-              return Problem("Entity set 'WebApplication1Context.Image'  is null.");
-          }
-            _context.Image.Add(image);
-            await _context.SaveChangesAsync();
+            try
+            {
+                IFormCollection formCollection = await Request.ReadFormAsync();
+                IFormFile file = formCollection.Files.First();
 
-            return CreatedAtAction("GetImage", new { id = image.Id }, image);
+                Image image = Image.Load(file.OpenReadStream());
+                Photo photo = new Photo();
+
+                photo.MimeType = file.ContentType;
+                photo.FileName = Guid.NewGuid().ToString();
+                if (photo.MimeType == "image/jpeg")
+                    photo.FileName += ".jpg";
+                
+                
+                image.Save("C://Images/Large/" + photo.FileName);
+                image.Mutate(i => {
+                    i.Resize(new ResizeOptions()
+                    {
+                        Mode = ResizeMode.Min,
+                        Size = new Size() { Height = 500}
+                    });
+                });
+                image.Save("C://Images/Medium/" + photo.FileName);
+                image.Mutate(i => {
+                    i.Resize(new ResizeOptions()
+                    {
+                        Mode = ResizeMode.Min,
+                        Size = new Size() { Height = 200 }
+                    });
+                });
+                image.Save("C://Images/Small/" + photo.FileName);
+
+
+
+                _context.Photos.Add(photo);
+                _context.SaveChanges();
+
+                
+
+            }
+            catch(Exception){}
+            return Ok();
         }
 
         // DELETE: api/Images/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteImage(int id)
         {
-            if (_context.Image == null)
+            if (_context.Photos == null)
             {
                 return NotFound();
             }
-            var image = await _context.Image.FindAsync(id);
+            var image = await _context.Photos.FindAsync(id);
             if (image == null)
             {
                 return NotFound();
             }
 
-            _context.Image.Remove(image);
+            _context.Photos.Remove(image);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -118,7 +119,7 @@ namespace WebApplication1.Controllers
 
         private bool ImageExists(int id)
         {
-            return (_context.Image?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Photos?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

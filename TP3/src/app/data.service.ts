@@ -30,7 +30,7 @@ export class DataService {
   public async login(username: String, password: String){
     let user = {
       "userName": username,
-      "password": password  
+      "password": password
     }
       this.http.post<any>('http://localhost:5165/api/Account/Login', user).subscribe(res => {
       console.log(res);
@@ -96,4 +96,12 @@ export class DataService {
         }
       }
     }
-  }}
+  }
+  public async uploadOnChange(file: File){
+    if (file == null) return
+    let formData = new FormData();
+    formData.append('file', file, file.name)
+    this.http.post('http://localhost:5165/api/images', formData).subscribe();
+  }
+
+}

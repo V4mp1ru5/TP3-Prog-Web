@@ -8,9 +8,9 @@
     <label for="public">Voyage Public</label>
     <input #pub type="checkbox" id="public" >
     <br/>
-    <label for="image">Télécharger une Image:</label>
+    <label  for="image">Télécharger une Image:</label>
     <br/>
-    <input type="file" id="image" >
+    <input #fileUpload type="file" name="image" id="image" accept="image/*" (change)="data.uploadOnChange(fileUpload.files![0])">
     <br/>
     <button type="submit">Ajouter</button>
   </form>
